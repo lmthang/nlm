@@ -1,7 +1,7 @@
 Training / Testing Neural Language Models (NLMs) using Python/Theano
 Thang Luong @ 2014, 2015 <lmthang@stanford.edu>
 
-This codebase allows for training feed-forward NLMs. It takes as input tokenized texts and automatically performs all the preprocessing steps (build vocab, convert text form into integer format, and extract ngrams to train). Additionally, one can also input parallel corpus and an alignment file to train joint NLMs that condition not only on target words but also source words. This is in the context of machine translation (MT) and replicates the Neural Network Joint Models (NNJMs) proposed in the BBN's paper http://acl2014.org/acl2014/P14-1/pdf/P14-1129.pdf with several differences. 
+This codebase allows for training feed-forward NLMs, both monolingual (normal) models and bilingual (joint) models that condition on the source text as well. The joint NLM is in the context of machine translation (MT) and replicates the model proposed in the BBN's paper http://acl2014.org/acl2014/P14-1/pdf/P14-1129.pdf with several differences. 
 
 For more details about this code, please refer to our paper:
 Deep Neural Language Models for Machine Translation
@@ -11,12 +11,13 @@ http://www.aclweb.org/anthology/K/K15/K15-1031.pdf
 Feature highlights:
 (a) train both monolingual (normal) and bilingual (joint) NLM models.
 (b) have self-normalization feature.
-(c) can resume from a saved model.
-(d) test trained NLMs to produce sentence probabilities.
-(e) have dropout (though we haven't been able to achieve gains).
+(c) include all the preprocessing steps (build vocab, convert text form into integer format, and extract ngrams to train).
+(d) resume training from a saved model.
+(e) test trained NLMs to produce sentence probabilities.
+(f) have dropout (we haven't tested this feature thoroughly and weren't able to achieve gains).
 
 Files & Directories:
-(a) README.TXT      - this file
+(a) README.txt     - this file
 (b) code/           - directory contains all the code files, e.g. train_nlm.py and test_nlm.py.
 (c) data/: contains files (train|tune|test).(en|zh|align) where -.align contains alignments for a pair of sentences per line. Each line is a series of pairs Chinese positions - English positions.
 
@@ -40,4 +41,4 @@ THEANO_FLAGS='device=gpu0' python ./code/train_nlm.py --self_norm_coeff 0.1 --ac
 (c) Test NLMs: test_nlm.py [options] model_file vocab_file test_file out_file
 THEANO_FLAGS='device=gpu0' python ./code/test_nlm.py --self_norm_coeff 0.1 --act_func tanh --joint --src_lang zh --tgt_lang en --src_file ./data/test.zh --align_file ./data/test.align ./output/toy_joint_self.model ./output/toy_joint_self.vocab ./data/test.en ./output/toy_scores.txt 
 
-Note that: the test_nlm.py code will try to output a perplexity score as well. For sefl-norm model, to get a correct perplexity, remove the option --self_norm_coeff 0.1
+Note that: the test_nlm.py code will try to output a perplexity score as well. For self-norm model, to get a correct perplexity, remove the option --self_norm_coeff 0.1
